@@ -1,9 +1,17 @@
 import { Badge } from "./badge"
+import { ClassicRecordResponse, PlatformerRecordResponse } from "./record"
 import { RegionPlayerResponse } from "./region"
 
 export type PlayerResponse = {
     id: string,
     username: string,
+}
+
+export type PlayerShortResponse = {
+  id: string,
+  username: string,
+  avatar?: string,
+  permissions: string[]
 }
 
 export type PlayerPointsResponse = {
@@ -21,8 +29,8 @@ export type PlayerProfileResponse = {
     classicPoints: number,
     platformerPoints: number,
     badges: Badge[],
-    classicRecords: ,
-    platformerRecords: ,
+    classicRecords: ClassicRecordResponse[],
+    platformerRecords: PlatformerRecordResponse[],
     active: boolean,
     flagged: boolean,
     discord: string,
