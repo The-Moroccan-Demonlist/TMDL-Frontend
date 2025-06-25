@@ -12,6 +12,7 @@ import {
     Settings,
     LogOut,
     Target,
+    OctagonMinus,
 } from "lucide-react";
 
 import {
@@ -27,6 +28,7 @@ import {
     SidebarMenuSub,
     SidebarMenuSubItem,
     useSidebar,
+    SidebarSeparator,
 } from "@/components/ui/sidebar";
 
 import {
@@ -49,10 +51,23 @@ import Link from "next/link";
 import Image from "next/image";
 import { useTheme } from "next-themes";
 import { Button } from "./ui/button";
+import { usePlayerStore } from "@/stores/player-store";
+import { useEffect } from "react";
+import { getAuthenticatedPlayer } from "@/lib/services/player-service";
 
 export function AppSidebar() {
     const { theme, setTheme } = useTheme();
     const { isMobile } = useSidebar();
+    const { player, setPlayer } = usePlayerStore()
+    const hasRestricted = player?.permissions?.includes("restricted")
+
+    useEffect(() => {
+        getAuthenticatedPlayer()
+            .then(setPlayer)
+            .catch((err) => {
+                console.error("Error fetching player:", err)
+            })
+    }, [setPlayer])
 
     return (
         <Sidebar collapsible="icon">
@@ -173,12 +188,58 @@ export function AppSidebar() {
                                 </Link>
                             </SidebarMenuButton>
                         </SidebarMenuItem>
+
+
+                        {hasRestricted && (
+                            <>
+                                <SidebarSeparator />
+                                <SidebarMenuItem>
+                                    <SidebarMenuButton asChild tooltip="Staff menu">
+                                        <Link href="/staff">
+                                            <OctagonMinus />
+                                            <span>Staff menu</span>
+                                        </Link>
+                                    </SidebarMenuButton>
+                                    <SidebarMenuSub>
+                                        <SidebarMenuSubItem key="staff-levels">
+                                            <SidebarMenuSubButton asChild>
+                                                <Link href="/staff/levels">Levels</Link>
+                                            </SidebarMenuSubButton>
+                                        </SidebarMenuSubItem>
+
+                                        <SidebarMenuSubItem key="staff-records">
+                                            <SidebarMenuSubButton asChild>
+                                                <Link href="/staff/records">Records</Link>
+                                            </SidebarMenuSubButton>
+                                        </SidebarMenuSubItem>
+
+                                        <SidebarMenuSubItem key="staff-regions">
+                                            <SidebarMenuSubButton asChild>
+                                                <Link href="/staff/regions">Regions</Link>
+                                            </SidebarMenuSubButton>
+                                        </SidebarMenuSubItem>
+
+                                        <SidebarMenuSubItem key="staff-badges">
+                                            <SidebarMenuSubButton asChild>
+                                                <Link href="/staff/badges">Badges</Link>
+                                            </SidebarMenuSubButton>
+                                        </SidebarMenuSubItem>
+
+                                        <SidebarMenuSubItem key="staff-logs">
+                                            <SidebarMenuSubButton asChild>
+                                                <Link href="/staff/logs">Logs</Link>
+                                            </SidebarMenuSubButton>
+                                        </SidebarMenuSubItem>
+                                    </SidebarMenuSub>
+                                </SidebarMenuItem>
+                            </>
+                        )}
                     </SidebarMenu>
                 </SidebarGroup>
             </SidebarContent>
 
             <SidebarFooter>
-                {profile ? (
+                {player ? (
                     <SidebarMenu>
                         <SidebarMenuItem>
                             <DropdownMenu>
@@ -188,14 +249,14 @@ export function AppSidebar() {
                                         className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
                                     >
                                         <Avatar className="h-8 w-8 rounded-lg">
-                                            <AvatarImage src={profile.avatar} alt={profile.username} />
+                                            <AvatarImage src={player.avatar} alt={player.username} />
                                             <AvatarFallback className="rounded-lg">
-                                                {profile.username?.[0]}
+                                                {player.username?.[0]}
                                             </AvatarFallback>
                                         </Avatar>
                                         <div className="grid flex-1 text-left text-sm leading-tight">
-                                            <span className="truncate font-medium">{profile.username}</span>
-                                            {/* <span className="truncate text-xs">{profile.email}</span> */}
+                                            <span className="truncate font-medium">{player.username}</span>
+                                            {/* <span className="truncate text-xs">{player.email}</span> */}
                                         </div>
                                         <ChevronsUpDown className="ml-auto size-4" />
                                     </SidebarMenuButton>
@@ -209,16 +270,16 @@ export function AppSidebar() {
                                     <DropdownMenuLabel className="p-0 font-normal">
                                         <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                                             <Avatar className="h-8 w-8 rounded-lg">
-                                                <AvatarImage src={profile.avatar} alt={profile.username} />
+                                                <AvatarImage src={player.avatar} alt={player.username} />
                                                 <AvatarFallback className="rounded-lg">
-                                                    {profile.username?.[0]}
+                                                    {player.username?.[0]}
                                                 </AvatarFallback>
                                             </Avatar>
                                             <div className="grid flex-1 text-left text-sm leading-tight">
                                                 <span className="truncate font-medium">
-                                                    {profile.username}
+                                                    {player.username}
                                                 </span>
-                                                {/* <span className="truncate text-xs">{profile.email}</span> */}
+                                                {/* <span className="truncate text-xs">{player.email}</span> */}
                                             </div>
                                         </div>
                                     </DropdownMenuLabel>
