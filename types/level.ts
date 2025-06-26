@@ -1,7 +1,7 @@
 import { PlayerResponse } from "./player"
 import { ClassicRecord, PlatformerRecord } from "./record"
 
-enum Difficulty {
+export enum Difficulty {
   EASY_DEMON = 'Easy demon',
   MEDIUM_DEMON = 'Medium demon',
   HARD_DEMON = 'Hard demon',
@@ -9,7 +9,7 @@ enum Difficulty {
   EXTREME_DEMON = 'Extreme demon'
 }
 
-enum Duration {
+export enum Duration {
   TINY = 'Tiny',
   SHORT = 'Short',
   MEDIUM = 'Medium',

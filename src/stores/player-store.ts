@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { PlayerShortResponse } from "../../types/player";
 
-interface PlayerStore {
+type PlayerStore = {
   player: PlayerShortResponse | null
   setPlayer: (player: PlayerShortResponse) => void
 }

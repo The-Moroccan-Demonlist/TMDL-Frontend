@@ -1,4 +1,7 @@
+import { useCsrfStore } from "@/stores/csrf-store";
 import axios, { AxiosError, AxiosRequestConfig } from "axios"
+
+const csrfToken = useCsrfStore.getState().token;
 
 const api = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL,
@@ -13,6 +16,18 @@ function processQueue() {
   failedQueue = []
 }
 
+api.interceptors.request.use((config) => {
+  const method = config.method?.toUpperCase()
+  if (method && ["POST", "PUT", "DELETE", "PATCH"].includes(method)) {
+    const csrfToken = useCsrfStore.getState().token;
+    if (csrfToken && config.headers) {
+      config.headers["X-XSRF-TOKEN"] = csrfToken
+    }
+  }
+
+  return config
+})
+
 api.interceptors.response.use(
   (response) => response,
   async (error: AxiosError) => {
@@ -24,7 +39,7 @@ api.interceptors.response.use(
       if (!isRefreshing) {
         isRefreshing = true
         try {
-          await axios.get(process.env.NEXT_PUBLIC_API_URL + "/oauth/refresh-token", { withCredentials: true })
+          await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/public/oauth/refresh-token`, { withCredentials: true })
           isRefreshing = false
           processQueue()
         } catch (refreshError) {

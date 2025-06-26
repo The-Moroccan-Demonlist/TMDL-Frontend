@@ -54,6 +54,7 @@ import { Button } from "./ui/button";
 import { usePlayerStore } from "@/stores/player-store";
 import { useEffect } from "react";
 import { getAuthenticatedPlayer } from "@/lib/services/player-service";
+import api from "@/lib/axios";
 
 export function AppSidebar() {
     const { theme, setTheme } = useTheme();
@@ -68,6 +69,19 @@ export function AppSidebar() {
                 console.error("Error fetching player:", err)
             })
     }, [setPlayer])
+
+    const handleLogout = async () => {
+        try {
+            await api.post(
+                `/public/oauth/logout`,
+                {},
+            );
+
+            window.location.href = "/";
+        } catch (error) {
+            console.error("Logout failed:", error);
+        }
+    };
 
     return (
         <Sidebar collapsible="icon">
@@ -299,7 +313,7 @@ export function AppSidebar() {
                                         </DropdownMenuItem>
                                     </DropdownMenuGroup>
                                     <DropdownMenuSeparator />
-                                    <DropdownMenuItem onClick={() => window.location.href = "http://localhost:8080/api/public/oauth/logout"}>
+                                    <DropdownMenuItem  onClick={handleLogout}>
                                         <LogOut />
                                         Log out
                                     </DropdownMenuItem>
