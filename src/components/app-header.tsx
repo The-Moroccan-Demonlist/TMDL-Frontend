@@ -5,7 +5,6 @@ import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbS
 import { Separator } from "./ui/separator"
 import { SidebarTrigger } from "./ui/sidebar"
 import { usePathname } from "next/navigation"
-import { ThemeSwitcher } from "./theme-switcher";
 
 export function AppHeader() {
     const pathname = usePathname();
@@ -55,9 +54,6 @@ export function AppHeader() {
                     )}
                 </BreadcrumbList>
             </Breadcrumb>
-            <div className="ml-auto flex items-center gap-2">
-                <ThemeSwitcher />
-            </div>
         </div>
     )
 }

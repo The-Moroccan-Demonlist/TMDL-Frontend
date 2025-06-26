@@ -13,6 +13,7 @@ import {
     LogOut,
     Target,
     OctagonMinus,
+    Paintbrush,
 } from "lucide-react";
 
 import {
@@ -37,7 +38,11 @@ import {
     DropdownMenuGroup,
     DropdownMenuItem,
     DropdownMenuLabel,
+    DropdownMenuPortal,
     DropdownMenuSeparator,
+    DropdownMenuSub,
+    DropdownMenuSubContent,
+    DropdownMenuSubTrigger,
     DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
 
@@ -55,9 +60,11 @@ import { usePlayerStore } from "@/stores/player-store";
 import { useEffect } from "react";
 import { getAuthenticatedPlayer } from "@/lib/services/player-service";
 import api from "@/lib/axios";
+import { useColorStore } from "@/stores/color-store";
 
 export function AppSidebar() {
     const { theme, setTheme } = useTheme();
+    const { setColor } = useColorStore()
     const { isMobile } = useSidebar();
     const { player, setPlayer } = usePlayerStore()
     const hasRestricted = player?.permissions?.includes("restricted")
@@ -90,13 +97,13 @@ export function AppSidebar() {
                     <SidebarMenuItem>
                         <SidebarMenuButton size="lg" asChild>
                             <Link href="/" className="font-medium">
-                                <div className="bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg">
+                                <div className="bg-sidebar-primary-foreground text-accent-foreground flex aspect-square size-8 items-center justify-center rounded-lg">
                                     <Image
-                                        src="/logo.png"
+                                        // src={theme === "dark" ? "/logo.png" : "/logo-black.png"}
+                                        src="/logo-black.png"
                                         alt="The Moroccan Demonlist's Logo"
                                         height="500"
                                         width="500"
-                                        onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
                                     />
                                 </div>
                                 <div className="flex flex-col gap-0.5 leading-none">
@@ -300,21 +307,39 @@ export function AppSidebar() {
                                     <DropdownMenuSeparator />
                                     <DropdownMenuGroup>
                                         <DropdownMenuItem>
-                                            <User />
+                                            <User className="text-foreground"/>
                                             Account
                                         </DropdownMenuItem>
                                         <DropdownMenuItem>
-                                            <Send />
+                                            <Send className="text-foreground"/>
                                             Submissions
                                         </DropdownMenuItem>
+                                        <DropdownMenuSub>
+                                            <DropdownMenuSubTrigger>
+                                                <div className="flex items-center gap-2 text-foreground">
+                                                <Paintbrush width="16" height="16"/>
+                                                Theme
+                                                </div>
+                                            </DropdownMenuSubTrigger>
+                                            <DropdownMenuPortal>
+                                                <DropdownMenuSubContent>
+                                                    <DropdownMenuItem onClick={() => { setTheme("light"); setColor("neutral"); }}>Light</DropdownMenuItem>
+                                                    <DropdownMenuItem onClick={() => { setTheme("dark"); setColor("neutral"); }}>Dark</DropdownMenuItem>
+                                                    <DropdownMenuItem onClick={() => { setTheme("dark"); setColor("stone"); }}>Stone</DropdownMenuItem>
+                                                    <DropdownMenuItem onClick={() => { setTheme("dark"); setColor("zinc"); }}>Zinc</DropdownMenuItem>
+                                                    <DropdownMenuItem onClick={() => { setTheme("dark"); setColor("gray"); }}>Gray</DropdownMenuItem>
+                                                    <DropdownMenuItem onClick={() => { setTheme("dark"); setColor("slate"); }}>Slate</DropdownMenuItem>
+                                                </DropdownMenuSubContent>
+                                            </DropdownMenuPortal>
+                                        </DropdownMenuSub>
                                         <DropdownMenuItem>
-                                            <Settings />
+                                            <Settings className="text-foreground"/>
                                             Settings
                                         </DropdownMenuItem>
                                     </DropdownMenuGroup>
                                     <DropdownMenuSeparator />
-                                    <DropdownMenuItem  onClick={handleLogout}>
-                                        <LogOut />
+                                    <DropdownMenuItem onClick={handleLogout}>
+                                        <LogOut className="text-foreground"/>
                                         Log out
                                     </DropdownMenuItem>
                                 </DropdownMenuContent>

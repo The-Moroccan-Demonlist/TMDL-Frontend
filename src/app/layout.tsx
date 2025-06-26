@@ -6,14 +6,14 @@ import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app-sidebar";
 import { AppHeader } from "@/components/app-header";
 import { useEffect, useState } from "react";
-import { useThemeStore } from "@/stores/theme-store";
+import { useColorStore } from "@/stores/color-store";
 
 export default function RootLayout({ children, }: Readonly<{ children: React.ReactNode; }>) {
-  const theme = useThemeStore((state) => state.theme);
+  const color = useColorStore((state) => state.color);
 
   useEffect(() => {
-    document.documentElement.setAttribute("data-theme", theme)
-  }, [theme])
+    document.documentElement.setAttribute("data-color", color)
+  }, [color])
 
   return (
     <html lang="en" suppressHydrationWarning>
