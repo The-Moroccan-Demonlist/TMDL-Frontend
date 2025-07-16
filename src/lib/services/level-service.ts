@@ -3,15 +3,14 @@ import { ClassicLevelCreationRequest, ClassicLevelResponse, PlatformerLevelCreat
 import api from "@/lib/axios"
 
 export async function createClassic(
-    payload: ClassicLevelCreationRequest
+    payload: ClassicLevelCreationRequest | FormData
 ): Promise<ClassicLevelResponse> {
 
+    const isFormData = typeof FormData !== 'undefined' && payload instanceof FormData;
     const response = await api.post<ClassicLevelResponse>(
         "/staff/classic-levels/create",
         payload,
-        {
-            withCredentials: true,
-        }
+        { withCredentials: true }
     );
 
     return response.data;

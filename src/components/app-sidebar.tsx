@@ -67,7 +67,7 @@ export function AppSidebar() {
     const { setColor } = useColorStore()
     const { isMobile } = useSidebar();
     const { player, setPlayer } = usePlayerStore()
-    const hasRestricted = player?.permissions?.includes("restricted")
+    const hasRestricted = player?.permissions?.includes("staff:all")
 
     useEffect(() => {
         getAuthenticatedPlayer()
